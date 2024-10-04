@@ -1,0 +1,6 @@
+{
+  "ConnectionStrings": {
+    "ManagerWH": "Server=nataliia\\mssqlserver02;Database=ManagerWH;Integrated Security=True;"
+
+  }
+}
