@@ -1,5 +1,4 @@
 ﻿using Dal.Concrete;
-using Dal.Interface;
 using DTO;
 using Microsoft.Extensions.Configuration;
 
@@ -8,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 
 
-IConfiguration configuration = new ConfigurationBuilder()
+    IConfiguration configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("manager.json")
     .Build();

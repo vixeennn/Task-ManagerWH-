@@ -11,6 +11,7 @@ namespace Dal.Interface
         Users GetUserByUsername(string username);
         void UpdatePassword(Users user);
         void Delete(int userId);
-        Users GetById(int userId); 
+        Users GetById(int userId);
+        bool VerifyPassword(string enteredPassword, string storedHashedPassword);
     }
 }

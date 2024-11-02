@@ -3,6 +3,8 @@ using DTO;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Dal.Concrete
 {
@@ -15,108 +17,155 @@ namespace Dal.Concrete
             _connection = new SqlConnection(connectionString);
         }
 
-        public List<Users> GetAll()
+        private string GenerateSalt()
         {
-            using (SqlCommand command = _connection.CreateCommand())
+            byte[] saltBytes = new byte[16];
+            using (var rng = new RNGCryptoServiceProvider())
             {
-                command.CommandText = "SELECT UserID, Username, Password FROM Users";
+                rng.GetBytes(saltBytes);
+            }
+            return Convert.ToBase64String(saltBytes);
+        }
 
-                _connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
 
-                var users = new List<Users>();
-                while (reader.Read())
-                {
-                    users.Add(new Users
-                    {
-                        UserID = Convert.ToInt32(reader["UserID"]),
-                        Username = reader["Username"].ToString(),
-                        Password = reader["Password"].ToString(),
-                    });
-                }
 
-                _connection.Close();
-                return users;
+
+        private string HashPassword(string password, string salt)
+        {
+            using (var sha512 = SHA512.Create())
+            {
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(salt + password);
+                byte[] hashBytes = sha512.ComputeHash(passwordBytes);
+                return salt + Convert.ToBase64String(hashBytes);
             }
         }
 
-        public Users Insert(Users users)
-        {
-            using (SqlCommand command = _connection.CreateCommand())
-            {
-                command.CommandText = "INSERT INTO Users (Username, Password) OUTPUT INSERTED.UserID VALUES (@Username, @Password)";
-                command.Parameters.Clear();
-                command.Parameters.AddWithValue("@Username", users.Username);
-                command.Parameters.AddWithValue("@Password", users.Password);
 
-                _connection.Open();
-                users.UserID = Convert.ToInt32(command.ExecuteScalar());
-                _connection.Close();
-                return users;
-            }
-        }
-
-        public Users GetUserByUsernameAndPassword(string username, string password)
-        {
-            using (SqlCommand command = _connection.CreateCommand())
-            {
-                command.CommandText = "SELECT UserID, Username, Password FROM Users WHERE Username = @Username AND Password = @Password";
-                command.Parameters.Clear();
-                command.Parameters.AddWithValue("@Username", username);
-                command.Parameters.AddWithValue("@Password", password);
-
-                _connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.Read())
-                {
-                    return new Users
-                    {
-                        UserID = Convert.ToInt32(reader["UserID"]),
-                        Username = reader["Username"].ToString(),
-                        Password = reader["Password"].ToString(),
-                    };
-                }
-
-                _connection.Close();
-                return null;
-            }
-        }
+       
 
         public Users GetUserByUsername(string username)
         {
+            Users user = null;
+
             using (SqlCommand command = _connection.CreateCommand())
             {
                 command.CommandText = "SELECT * FROM Users WHERE Username = @Username";
                 command.Parameters.Clear();
                 command.Parameters.AddWithValue("@Username", username);
 
+                try
+                {
+                    _connection.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            user = new Users
+                            {
+                                UserID = (int)reader["UserID"],
+                                Username = reader["Username"].ToString(),
+                                Password = reader["Password"].ToString(),
+                            };
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    Console.WriteLine($"SQL error: {ex.Message}");
+                }
+                finally
+                {
+                    _connection.Close();
+                }
+            }
+
+            return user;
+        }
+
+        public Users GetUserByUsernameAndPassword(string username, string password)
+        {
+            var user = GetUserByUsername(username);
+            if (user == null)
+            {
+                
+                Console.WriteLine($"User not found: {username}");
+                return null;
+            }
+
+            if (!VerifyPassword(password, user.Password))
+            {
+               
+                Console.WriteLine($"Invalid password for user: {username}");
+                return null;
+            }
+
+            return user;
+        }
+
+        public bool VerifyPassword(string enteredPassword, string storedHashedPassword)
+        {
+            string salt = storedHashedPassword.Substring(0, 24);
+            string hashedInputPassword = HashPassword(enteredPassword, salt);
+            return hashedInputPassword == storedHashedPassword;
+        }
+      
+
+        public List<Users> GetAll()
+        {
+            var users = new List<Users>();
+            using (SqlCommand command = _connection.CreateCommand())
+            {
+                command.CommandText = "SELECT UserID, Username, Password FROM Users";
+
                 _connection.Open();
                 using (var reader = command.ExecuteReader())
                 {
-                    if (reader.Read())
+                    while (reader.Read())
                     {
-                        return new Users
+                        users.Add(new Users
                         {
-                            UserID = (int)reader["UserID"],
+                            UserID = Convert.ToInt32(reader["UserID"]),
                             Username = reader["Username"].ToString(),
                             Password = reader["Password"].ToString(),
-                        };
+                        });
                     }
                 }
                 _connection.Close();
             }
-
-            return null;
+            return users;
         }
+
+        public Users Insert(Users user)
+        {
+            string salt = GenerateSalt();
+            string hashedPassword = HashPassword(user.Password, salt);
+
+            using (SqlCommand command = _connection.CreateCommand())
+            {
+                command.CommandText = "INSERT INTO Users (Username, Password) OUTPUT INSERTED.UserID VALUES (@Username, @Password)";
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@Username", user.Username);
+                command.Parameters.AddWithValue("@Password", hashedPassword);
+
+                _connection.Open();
+                user.UserID = Convert.ToInt32(command.ExecuteScalar());
+                _connection.Close();
+                return user;
+            }
+        }
+
+
 
         public void UpdatePassword(Users user)
         {
+            string salt = GenerateSalt();
+            string hashedPassword = HashPassword(user.Password, salt);
+
             using (SqlCommand command = _connection.CreateCommand())
             {
                 command.CommandText = "UPDATE Users SET Password = @Password WHERE UserID = @UserID";
                 command.Parameters.Clear();
-                command.Parameters.AddWithValue("@Password", user.Password);
+                command.Parameters.AddWithValue("@Password", hashedPassword);
                 command.Parameters.AddWithValue("@UserID", user.UserID);
 
                 _connection.Open();
@@ -141,6 +190,8 @@ namespace Dal.Concrete
 
         public Users GetById(int userId)
         {
+            Users user = null;
+
             using (SqlCommand command = _connection.CreateCommand())
             {
                 command.CommandText = "SELECT * FROM Users WHERE UserID = @UserID";
@@ -152,7 +203,7 @@ namespace Dal.Concrete
                 {
                     if (reader.Read())
                     {
-                        return new Users
+                        user = new Users
                         {
                             UserID = (int)reader["UserID"],
                             Username = reader["Username"].ToString(),
@@ -163,7 +214,7 @@ namespace Dal.Concrete
                 _connection.Close();
             }
 
-            return null;
+            return user;
         }
     }
 }

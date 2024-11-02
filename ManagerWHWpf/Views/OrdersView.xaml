@@ -1,0 +1,49 @@
+﻿<Window x:Class="ManagerWHWpf.Views.OrdersView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ManagerWHWpf.Views"
+        mc:Ignorable="d"
+        Title="OrdersView" Height="450" Width="800"
+        Background="{DynamicResource WindowBackgroundBrush}">
+
+    <Grid>
+        <StackPanel Margin="20">
+
+            
+            <TextBlock Text="Orders" 
+                       Style="{StaticResource TextBlockStyle}" 
+                       FontSize="24" 
+                       HorizontalAlignment="Center" 
+                       Margin="0,0,0,20"/>
+
+            
+            <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="Add Order" Style="{StaticResource ButtonStyle}" 
+                        Width="120" Margin="5" Click="AddOrderButton_Click"/>
+                <Button Content="Edit Order" Style="{StaticResource ButtonStyle}" 
+                        Width="120" Margin="5" Click="EditOrderButton_Click"/>
+                <Button Content="Delete Order" Style="{StaticResource ButtonStyle}" 
+                        Width="120" Margin="5" Click="DeleteOrderButton_Click"/>
+            </StackPanel>-->
+
+            
+            <!--<Button Content="Back" Style="{StaticResource ButtonStyle}" 
+                    Width="120" Margin="5" Click="BackButton_Click" 
+                    HorizontalAlignment="Center" />-->
+
+           
+            <ListView Name="OrdersListView" Margin="0,20,0,0">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Order ID" Width="100" DisplayMemberBinding="{Binding OrderId}"/>
+                        <GridViewColumn Header="Customer Name" Width="200" DisplayMemberBinding="{Binding CustomerName}"/>
+                        <GridViewColumn Header="Order Date" Width="150" DisplayMemberBinding="{Binding OrderDate}"/>
+                        <GridViewColumn Header="Status" Width="100" DisplayMemberBinding="{Binding Status}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
+    </Grid>
+</Window>
