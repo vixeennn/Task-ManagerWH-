@@ -3,10 +3,107 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ManagerWHWpf.Views"
         mc:Ignorable="d"
-        Title="ProductsView" Height="450" Width="800">
-    <Grid>
-        
+        Title="ProductsView" Height="700" Width="800"
+        Background="{StaticResource WindowBackgroundBrush}">
+
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Action Buttons and Product Details -->
+        <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,10,0">
+            <TextBlock Text="Product Details" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+
+            <!-- Product Name -->
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock Text="Product Name:" Margin="0,0,0,5"/>
+                <TextBox Width="200" Height="30" Text="{Binding NewProductName, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <!-- Quantity -->
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock Text="Quantity:" Margin="0,0,0,5"/>
+                <TextBox Width="200" Height="30" Text="{Binding NewProductQuantity, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <!-- Price -->
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock Text="Price:" Margin="0,0,0,5"/>
+                <TextBox Width="200" Height="30" Text="{Binding NewProductPrice, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <!-- Add Product Button -->
+            <Button Content="Add Product" 
+                    Style="{StaticResource ButtonStyle}" 
+                    Width="120" 
+                    Height="40" 
+                    Margin="5" 
+                    Command="{Binding AddProductCommand}"/>
+
+            <!-- Delete Section -->
+            <TextBlock Text="Select Product to Delete:" Margin="0,10,0,5"/>
+            <ComboBox Width="200" Height="30" 
+                      ItemsSource="{Binding Products}" 
+                      SelectedItem="{Binding SelectedProductForDeletion}" 
+                      DisplayMemberPath="Name"/>
+
+            <!-- Delete Product Button -->
+            <Button Content="Delete Product" 
+                    Style="{StaticResource ButtonStyle}" 
+                    Width="120" 
+                    Height="40" 
+                    Margin="5" 
+                    Command="{Binding DeleteProductCommand}"/>
+
+            <!-- Sort Products Section -->
+            <TextBlock Text="Sort By:" Margin="0,10,0,5"/>
+            <ComboBox Width="200" Height="30" 
+                      SelectedItem="{Binding SelectedSortOption, UpdateSourceTrigger=PropertyChanged}" 
+                      ItemsSource="{Binding SortOptions}"/>
+
+            <Button Content="Sort Products" 
+                    Style="{StaticResource ButtonStyle}" 
+                    Width="120" 
+                    Height="40" 
+                    Margin="5" 
+                    Command="{Binding SortProductsCommand}"/>
+
+            <Button Content="Back" 
+                    Style="{StaticResource ButtonStyle}" 
+                    Width="120" 
+                    Height="40" 
+                    Margin="5" 
+                    Click="BackButton_Click"/>
+        </StackPanel>
+
+        <!-- Search and List of Products Section -->
+        <StackPanel Grid.Column="1" Orientation="Vertical" Margin="0,0,0,10">
+
+            <!-- Пошуковий рядок -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10" HorizontalAlignment="Right">
+                <TextBlock Text="Product search:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                <TextBox Width="200" Height="30" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <!-- List of Products -->
+            <ListView Name="ProductsList" 
+                      Style="{StaticResource ListViewStyle}" 
+                      Margin="0,0,10,10"
+                      ItemsSource="{Binding FilteredProducts}" 
+                      SelectedItem="{Binding SelectedProductForDeletion}" 
+                      Height="300">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Product ID" Width="100" DisplayMemberBinding="{Binding ProductID}"/>
+                        <GridViewColumn Header="Product Name" Width="200" DisplayMemberBinding="{Binding Name}"/>
+                        <GridViewColumn Header="Quantity" Width="100" DisplayMemberBinding="{Binding QuantityInStock}"/>
+                        <GridViewColumn Header="Price" Width="100" DisplayMemberBinding="{Binding Price}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
     </Grid>
 </Window>

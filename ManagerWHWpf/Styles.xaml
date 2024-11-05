@@ -7,6 +7,19 @@
         <GradientStop Color="#9370DB" Offset="1.0"/>
     </RadialGradientBrush>
 
+    <!-- Стиль для Page -->
+    <Style TargetType="Page">
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#FFB6C1" Offset="0.0"/>
+                    <GradientStop Color="#9370DB" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Margin" Value="20"/>
+    </Style>
+
     <!-- Стиль для кнопок -->
     <Style TargetType="Button" x:Key="ButtonStyle">
         <Setter Property="Template">
@@ -74,8 +87,6 @@
         </Style.Triggers>
     </Style>
 
-
-
     <Style TargetType="PasswordBox" x:Key="PasswordBoxStyle">
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="Padding" Value="5"/>
@@ -95,8 +106,8 @@
     </Style>
 
     <Style TargetType="ListView" x:Key="ListViewStyle">
-        <Setter Property="Background" Value="White"/>
-        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="Background" Value="#F1C8E3"/>
+        <Setter Property="BorderBrush" Value="Black"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Padding" Value="0"/>
@@ -104,13 +115,20 @@
             <Setter.Value>
                 <Style TargetType="ListViewItem">
                     <Setter Property="Margin" Value="2"/>
-                    <Setter Property="Padding" Value="5"/>
+                    <Setter Property="Padding" Value="10"/>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="BorderBrush" Value="Transparent"/>
                     <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="Foreground" Value="#333"/>
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#F0F0F0"/>
+                            <Setter Property="Background" Value="#E0E0E0"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#9370DB"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -118,4 +136,35 @@
         </Setter>
     </Style>
 
+    <Style TargetType="ListBox" x:Key="ListBoxStyle">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Margin" Value="5"/>
+                    <Setter Property="Padding" Value="10"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#F0F0F0"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#9370DB"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

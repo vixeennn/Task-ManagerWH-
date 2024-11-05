@@ -6,40 +6,32 @@
         xmlns:local="clr-namespace:ManagerWHWpf.Views"
         mc:Ignorable="d"
         Title="RegisterView" Height="500" Width="800"
-        Background="#DDA0DD">
+         Background="{DynamicResource WindowBackgroundBrush}">
 
     <Grid>
         <StackPanel Margin="25" HorizontalAlignment="Center" VerticalAlignment="Center">
-            
 
             <TextBlock Text="Username" Style="{StaticResource TextBlockStyle}" />
             <TextBox x:Name="UsernameTextBox" Style="{StaticResource TextBoxStyle}" 
                      Width="300" 
-                     GotFocus="UsernameTextBox_GotFocus" 
-                     LostFocus="UsernameTextBox_LostFocus" />
+                     Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock x:Name="UsernamePlaceholder" Text="Enter your username" 
                        Foreground="Gray" Margin="5,0,0,10"/>
 
+            <!-- Password Input -->
             <TextBlock Text="Password" Style="{StaticResource TextBlockStyle}" />
             <PasswordBox x:Name="PasswordTextBox" Style="{StaticResource PasswordBoxStyle}" 
                          Width="300" 
-                         GotFocus="PasswordTextBox_GotFocus" 
-                         LostFocus="PasswordTextBox_LostFocus"/>
+                         PasswordChanged="PasswordTextBox_PasswordChanged"/>
             <TextBlock x:Name="PasswordPlaceholder" Text="Enter your password" 
                        Foreground="Gray" Margin="5,0,0,10"/>
 
-            <TextBlock Text="Confirm Password" Style="{StaticResource TextBlockStyle}" />
-            <PasswordBox x:Name="ConfirmPasswordTextBox" Style="{StaticResource PasswordBoxStyle}" 
-                         Width="300" 
-                         GotFocus="ConfirmPasswordTextBox_GotFocus" 
-                         LostFocus="ConfirmPasswordTextBox_LostFocus"/>
-            <TextBlock x:Name="ConfirmPasswordPlaceholder" Text="Confirm your password" 
-                       Foreground="Gray" Margin="5,0,0,10"/>
-
+            <!-- Register Button -->
             <Button Content="Register" Style="{StaticResource ButtonStyle}" 
                     Width="120" Margin="0,10,0,0" 
-                    Click="RegisterButton_Click"/>
+                    Command="{Binding RegisterCommand}"/>
 
+            <!-- Back Button -->
             <Button Content="Back" Style="{StaticResource ButtonStyle}" 
                     Width="120" Margin="0,10,0,0" 
                     Click="BackButton_Click"/>

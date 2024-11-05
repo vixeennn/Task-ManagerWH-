@@ -1,49 +1,127 @@
-﻿<Window x:Class="ManagerWHWpf.Views.OrdersView"
+﻿<Window x:Class="ManagerWHWpf.Views.OrdersView" 
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ManagerWHWpf.Views"
         mc:Ignorable="d"
-        Title="OrdersView" Height="450" Width="800"
+        Title="OrdersView" Height="600" Width="800"
         Background="{DynamicResource WindowBackgroundBrush}">
 
-    <Grid>
-        <StackPanel Margin="20">
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
 
-            
-            <TextBlock Text="Orders" 
-                       Style="{StaticResource TextBlockStyle}" 
-                       FontSize="24" 
-                       HorizontalAlignment="Center" 
-                       Margin="0,0,0,20"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            
-            <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Add Order" Style="{StaticResource ButtonStyle}" 
-                        Width="120" Margin="5" Click="AddOrderButton_Click"/>
-                <Button Content="Edit Order" Style="{StaticResource ButtonStyle}" 
-                        Width="120" Margin="5" Click="EditOrderButton_Click"/>
-                <Button Content="Delete Order" Style="{StaticResource ButtonStyle}" 
-                        Width="120" Margin="5" Click="DeleteOrderButton_Click"/>
-            </StackPanel>-->
+        <!-- Order Details -->
+        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical" Margin="20,0,10,0" HorizontalAlignment="Center">
+            <TextBlock Text="Order Details" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
 
-            
-            <!--<Button Content="Back" Style="{StaticResource ButtonStyle}" 
-                    Width="120" Margin="5" Click="BackButton_Click" 
-                    HorizontalAlignment="Center" />-->
+            <!-- Product Selection -->
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock Text="Select Product:" Margin="0,0,0,5"/>
+                <ComboBox Width="200" Height="30" 
+                          ItemsSource="{Binding Products}" 
+                          SelectedItem="{Binding SelectedProduct}" 
+                          DisplayMemberPath="Name" />
+            </StackPanel>
 
-           
-            <ListView Name="OrdersListView" Margin="0,20,0,0">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Order ID" Width="100" DisplayMemberBinding="{Binding OrderId}"/>
-                        <GridViewColumn Header="Customer Name" Width="200" DisplayMemberBinding="{Binding CustomerName}"/>
-                        <GridViewColumn Header="Order Date" Width="150" DisplayMemberBinding="{Binding OrderDate}"/>
-                        <GridViewColumn Header="Status" Width="100" DisplayMemberBinding="{Binding Status}"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+            <!-- Supplier Selection -->
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock Text="Select Supplier:" Margin="0,0,0,5"/>
+                <ComboBox Width="200" Height="30" 
+                          ItemsSource="{Binding Suppliers}" 
+                          SelectedItem="{Binding SelectedSupplier}" 
+                          DisplayMemberPath="Name" />
+            </StackPanel>
+
+            <!-- Status -->
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock Text="Status:" Margin="0,0,0,5"/>
+                <TextBox Width="200" Height="30" Text="{Binding NewStatus, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <!-- Quantity -->
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock Text="Quantity:" Margin="0,0,0,5"/>
+                <TextBox Width="200" Height="30" Text="{Binding NewOrderQuantity, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <!-- Add Order Button -->
+            <Button Content="Add Order" 
+                    Style="{StaticResource ButtonStyle}" 
+                    Width="120" 
+                    Height="40" 
+                    Margin="5" 
+                    Command="{Binding AddOrderCommand}"/>
         </StackPanel>
+
+        <!-- Action Buttons -->
+        <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Center" Margin="20,0,0,20">
+            <!-- Select Order to Edit -->
+            <TextBlock Text="Select Order to Edit:" Margin="0,10,0,5"/>
+            <ComboBox Width="200" Height="30" 
+                      ItemsSource="{Binding Orders}" 
+                      SelectedItem="{Binding SelectedOrderForEditing}" 
+                      DisplayMemberPath="OrderID"/>
+            <TextBlock Text="fill in the data in the order details" Margin="0,10,0,5"/>
+
+            <!-- Edit Order Button -->
+            <Button Content="Edit Order" 
+                    Style="{StaticResource ButtonStyle}" 
+                    Width="120" 
+                    Height="40" 
+                    Margin="5" 
+                    Command="{Binding EditOrderCommand}"/>
+
+            <!-- Delete Section -->
+            <TextBlock Text="Select Order to Delete:" Margin="0,10,0,5"/>
+            <ComboBox Width="200" Height="30" 
+                      ItemsSource="{Binding Orders}" 
+                      SelectedItem="{Binding SelectedOrderForDeletion}" 
+                      DisplayMemberPath="OrderID"/>
+
+            <!-- Delete Order Button -->
+            <Button Content="Delete Order" 
+                    Style="{StaticResource ButtonStyle}" 
+                    Width="120" 
+                    Height="40" 
+                    Margin="5" 
+                    Command="{Binding DeleteOrderCommand}"/>
+
+            <!-- Back Button -->
+            <Button Content="Back" 
+                    Style="{StaticResource ButtonStyle}" 
+                    Width="120" 
+                    Height="40" 
+                    Margin="5" 
+                    Click="BackButton_Click"/>
+        </StackPanel>
+
+        <!-- List of Orders -->
+        <ListView x:Name="OrdersList" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" 
+          Style="{StaticResource ListViewStyle}" 
+          Margin="0,10,0,0"
+          SelectionChanged="OrdersList_SelectionChanged"
+          ItemsSource="{Binding Orders}"
+          SelectedItem="{Binding SelectedOrderForDeletion}"
+          Height="200">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Order ID" Width="100" DisplayMemberBinding="{Binding OrderID}"/>
+                    <GridViewColumn Header="Product ID" Width="200" DisplayMemberBinding="{Binding ProductID}"/>
+                    <GridViewColumn Header="Supplier ID" Width="200" DisplayMemberBinding="{Binding SupplierID}"/>
+                    <GridViewColumn Header="Status" Width="100" DisplayMemberBinding="{Binding Status}"/>
+                    <GridViewColumn Header="Quantity" Width="100" DisplayMemberBinding="{Binding Quantity}"/>
+                    <GridViewColumn Header="Order Date" Width="150" DisplayMemberBinding="{Binding OrderDate}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ManagerWHWpf.Command.Product
+namespace BLTest
 {
-    internal class EditProductCommand
+    internal class SuppliersManagerTest
     {
     }
 }

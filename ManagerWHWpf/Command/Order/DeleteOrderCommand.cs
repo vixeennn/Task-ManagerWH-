@@ -1,37 +1,36 @@
-﻿using BusinessLogic.Interface;
-using DTO;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows.Input;
+using BusinessLogic.Interface;
+using ManagerWHWpf.ViewModels;
 
 namespace ManagerWHWpf.Command.Order
 {
     public class DeleteOrderCommand : ICommand
     {
         private readonly IOrdersManager _ordersManager;
-        private readonly ObservableCollection<Orders> _ordersCollection;
+        private readonly OrdersViewModel _viewModel;
 
-        public DeleteOrderCommand(IOrdersManager ordersManager, ObservableCollection<Orders> ordersCollection)
+        public DeleteOrderCommand(IOrdersManager ordersManager, OrdersViewModel viewModel)
         {
             _ordersManager = ordersManager;
-            _ordersCollection = ordersCollection;
+            _viewModel = viewModel;
         }
 
         public event EventHandler CanExecuteChanged;
 
-        public bool CanExecute(object parameter) => parameter is Orders;
+        public bool CanExecute(object parameter)
+        {
+            return _viewModel.SelectedOrderForEditing != null; 
+        }
 
         public void Execute(object parameter)
         {
-            if (parameter is Orders order)
-            {
-                _ordersManager.DeleteOrder(order.OrderID);
-                _ordersCollection.Remove(order);
-            }
+            _viewModel.DeleteSelectedOrder();
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

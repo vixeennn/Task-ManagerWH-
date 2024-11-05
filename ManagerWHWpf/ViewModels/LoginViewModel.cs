@@ -3,7 +3,6 @@ using ManagerWHWpf.Command;
 using ManagerWHWpf.Command.User;
 using ManagerWHWpf.ViewModels;
 using System;
-using System.Windows;
 using System.Windows.Input;
 
 public class LoginViewModel : BaseViewModel
@@ -11,8 +10,10 @@ public class LoginViewModel : BaseViewModel
     private readonly IUsersManager _usersManager;
     private string _username;
     private string _password;
+    private int _currentUserId; 
 
     public event EventHandler LoginSuccessful;
+    public event Action<string> LoginFailed;
 
     public string Username
     {
@@ -34,32 +35,25 @@ public class LoginViewModel : BaseViewModel
         }
     }
 
+    public int CurrentUserId => _currentUserId; 
+
     public ICommand LoginCommand { get; }
 
     public LoginViewModel(IUsersManager usersManager)
     {
         _usersManager = usersManager;
-        LoginCommand = new RelayCommand(_ => Login());
+
+        LoginCommand = new LoginCommand(
+            usersManager,
+            () => Username,  
+            () => Password,   
+            OnLoginSuccess,
+            message => LoginFailed?.Invoke(message));
     }
 
-    private void Login()
+    private void OnLoginSuccess()
     {
-        {
-
-            var user = _usersManager.GetUserByUsernameAndPassword(Username, Password);
-            if (user != null)
-            {
-                LoginSuccessful?.Invoke(this, EventArgs.Empty);
-            }
-            else
-            {
-                MessageBox.Show("Invalid username or password. Please try again.");
-            }
-        }
-    }
-
-    public void UpdatePassword(string password)
-    {
-        Password = password;
+        _currentUserId = _usersManager.GetCurrentUserId(Username); 
+        LoginSuccessful?.Invoke(this, EventArgs.Empty);
     }
 }

@@ -18,6 +18,8 @@ using Dal.Interface;
 using Dal.Concrete;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using Microsoft.Extensions.DependencyInjection;
+using BusinessLogic.Interface;
 
 namespace ManagerWHWpf
 {
@@ -44,16 +46,33 @@ namespace ManagerWHWpf
             var dbConfig = new Configuration(_connectionString); 
             var usersDal = new UsersDal(dbConfig.ConnectionString); 
             var usersManager = new UsersManager(usersDal);
+            var productsDal = new ProductsDal(dbConfig.ConnectionString); 
+            var productsManager = new ProductsManager(productsDal);
+            var ordersDal = new OrdersDal(dbConfig.ConnectionString);
+            var ordersManager = new OrdersManager(ordersDal);
+            var suppliersDal = new SuppliersDal(dbConfig.ConnectionString);
+            var suppliersManager = new SuppliersManager(suppliersDal);
 
-            
-            var loginView = new LoginView(usersManager);
+
+            var loginView = new LoginView(usersManager, productsManager, ordersManager, suppliersManager);
             loginView.Show();
             this.Close();
         }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
+
         {
-            var registerView = new RegisterView();
+            var dbConfig = new Configuration(_connectionString);
+            var usersDal = new UsersDal(dbConfig.ConnectionString);
+            var usersManager = new UsersManager(usersDal);
+            var productsDal = new ProductsDal(dbConfig.ConnectionString);
+            var productsManager = new ProductsManager(productsDal);
+            var ordersDal = new OrdersDal(dbConfig.ConnectionString);
+            var ordersManager = new OrdersManager(ordersDal);
+            var suppliersDal = new SuppliersDal(dbConfig.ConnectionString);
+            var suppliersManager = new SuppliersManager(suppliersDal);
+
+            var registerView = new RegisterView(usersManager, productsManager, ordersManager, suppliersManager);
             registerView.Show();
             this.Close();
         }

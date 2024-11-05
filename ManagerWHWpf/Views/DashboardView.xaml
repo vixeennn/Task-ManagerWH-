@@ -35,6 +35,11 @@
                     Width="200" Margin="0,5" Click="OrdersButton_Click"/>
             <Button Content="Suppliers" Style="{StaticResource ButtonStyle}" 
                     Width="200" Margin="0,5" Click="SuppliersButton_Click"/>
+
+            <!--<Button Content="Delete User" Style="{StaticResource ButtonStyle}" 
+                    Width="200" Margin="0,5" 
+                    Command="{Binding DeleteUserCommand}" 
+                    CommandParameter="{Binding Text, ElementName=UserIdTextBox}"/>-->
             <Button Content="Exit" Style="{StaticResource ButtonStyle}" 
                     Width="200" Margin="0,5" Click="LogoutButton_Click"/>
         </StackPanel>

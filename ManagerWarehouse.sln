@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DalTest", "DalTest\DalTest.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{177BA4D9-D218-410C-B631-901E66D62F35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagerWHWpf", "ManagerWHWpf\ManagerWHWpf.csproj", "{76655BFB-13DE-479C-A985-E14B7264C169}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ManagerWHWpf", "ManagerWHWpf\ManagerWHWpf.csproj", "{76655BFB-13DE-479C-A985-E14B7264C169}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLTests", "BLTests\BLTests.csproj", "{933E2301-A2B2-43C1-8EA7-70C90C854EEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{76655BFB-13DE-479C-A985-E14B7264C169}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76655BFB-13DE-479C-A985-E14B7264C169}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76655BFB-13DE-479C-A985-E14B7264C169}.Release|Any CPU.Build.0 = Release|Any CPU
+		{933E2301-A2B2-43C1-8EA7-70C90C854EEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{933E2301-A2B2-43C1-8EA7-70C90C854EEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{933E2301-A2B2-43C1-8EA7-70C90C854EEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{933E2301-A2B2-43C1-8EA7-70C90C854EEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

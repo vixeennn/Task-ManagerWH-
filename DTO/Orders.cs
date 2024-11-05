@@ -10,6 +10,9 @@ namespace DTO
         public int UserID { get; set; }
         public int Quantity { get; set; }
         public string Status { get; set; }
-        public DateTime OrderDate { get; set; }
+       
+        public DateTime OrderDate { get; set; } = DateTime.Now;
+
+
     }
 }

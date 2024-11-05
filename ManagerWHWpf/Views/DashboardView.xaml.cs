@@ -1,63 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BusinessLogic.Interface;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace ManagerWHWpf.Views
 {
-    /// <summary>
-    /// Interaction logic for DashboardView.xaml
-    /// </summary>
     public partial class DashboardView : Window
     {
-        public DashboardView()
+        private readonly IProductsManager _productsManager;
+        private readonly IOrdersManager _ordersManager;
+        private readonly ISuppliersManager _suppliersManager;
+        private readonly int _currentUserId; 
+
+        public DashboardView(IProductsManager productsManager, IOrdersManager ordersManager, ISuppliersManager suppliersManager, int currentUserId)
         {
             InitializeComponent();
+            _productsManager = productsManager;
+            _ordersManager = ordersManager;
+            _suppliersManager = suppliersManager;
+            _currentUserId = currentUserId; 
         }
-
 
         private void ProductsButton_Click(object sender, RoutedEventArgs e)
         {
             
-            var productsView = new ProductsView(); 
-            productsView.Show(); 
-            this.Close(); 
+            var productsView = new ProductsView(_productsManager, _ordersManager, _suppliersManager, _currentUserId);
+            productsView.Show();
+            this.Close();
         }
 
         private void OrdersButton_Click(object sender, RoutedEventArgs e)
         {
-           
-            var createOrderView = new OrdersView(); 
-            createOrderView.Show(); 
-            this.Close(); 
+          
+            var createOrderView = new OrdersView(_ordersManager, _productsManager, _suppliersManager, _currentUserId);
+            createOrderView.Show();
+            this.Close();
         }
 
         private void SuppliersButton_Click(object sender, RoutedEventArgs e)
         {
-            
-            var activeOrdersView = new SuppliersView(); 
-            activeOrdersView.Show(); 
-            this.Close(); 
+            var suppliersView = new SuppliersView(_productsManager, _ordersManager, _suppliersManager, _currentUserId);
+            suppliersView.Show();
+            this.Close();
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
-            
             MessageBoxResult result = MessageBox.Show("Are you sure you want to exit?", "Exit", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                Application.Current.Shutdown(); 
+                Application.Current.Shutdown();
             }
         }
     }
 }
-

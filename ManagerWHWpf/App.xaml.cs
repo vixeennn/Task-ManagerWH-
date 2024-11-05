@@ -25,7 +25,7 @@ namespace ManagerWHWpf
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }
 
-        private void ConfigureServices(ServiceCollection services)
+        private void ConfigureServices(IServiceCollection services) // Змінено на IServiceCollection
         {
             // Налаштування конфігурації для зчитування з manager.json
             var configuration = new ConfigurationBuilder()

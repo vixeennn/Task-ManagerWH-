@@ -1,35 +1,60 @@
-﻿using BusinessLogic.Concrete;
-using BusinessLogic.Interface;
-using Dal.Concrete;
-using Dal.Interface;
+﻿using BusinessLogic.Interface;
+using DTO;
 using ManagerWHWpf.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace ManagerWHWpf.Views
 {
-    /// <summary>
-    /// Interaction logic for OrdersView.xaml
-    /// </summary>
     public partial class OrdersView : Window
     {
-        public OrdersView()
+        private readonly IOrdersManager _ordersManager;
+        private readonly IProductsManager _productsManager;
+        private readonly ISuppliersManager _suppliersManager;
+        private readonly int _currentUserId; 
+
+        public OrdersView(IOrdersManager ordersManager, IProductsManager productsManager, ISuppliersManager suppliersManager, int currentUserId)
         {
             InitializeComponent();
-            //IOrdersDal ordersDal = new OrdersDal(); // Ваша реалізація IOrdersDal
-            //IOrdersManager ordersManager = new OrdersManager(ordersDal); // Створення OrdersManager
-            //DataContext = new OrdersViewModel(ordersManager);
+            _ordersManager = ordersManager;
+            _productsManager = productsManager;
+            _suppliersManager = suppliersManager;
+            _currentUserId = currentUserId; 
+
+            var viewModel = new OrdersViewModel(ordersManager, productsManager, suppliersManager, currentUserId); // Pass the user ID to the ViewModel
+            viewModel.OrderDeleted += (sender, e) =>
+            {
+                MessageBox.Show("The order has been successfully deleted.");
+            };
+            viewModel.OrderAddFailed += ViewModel_OrderAddFailed;
+            DataContext = viewModel;
+        }
+
+        private void ViewModel_OrderDeleted(object sender, EventArgs e)
+        {
+            MessageBox.Show("The order has been successfully deleted.");
+        }
+
+        private void ViewModel_OrderAddFailed(string message)
+        {
+            MessageBox.Show(message, "Error adding an order", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void OrdersList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (OrdersList.SelectedItem is Orders selectedOrder)
+            {
+                var viewModel = (OrdersViewModel)DataContext;
+                viewModel.SelectedOrderForEditing = selectedOrder; 
+            }
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dashboardView = new DashboardView(_productsManager, _ordersManager, _suppliersManager, _currentUserId);
+            dashboardView.Show();
+            this.Close();
         }
     }
 }

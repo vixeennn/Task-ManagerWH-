@@ -1,12 +1,86 @@
-﻿<Window x:Class="ManagerWHWpf.Views.SuppliersView"
+﻿<Window x:Class="ManagerWHWpf.Views.SuppliersView" 
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ManagerWHWpf.Views"
         mc:Ignorable="d"
-        Title="SuppliersView" Height="450" Width="800">
-    <Grid>
-        
+        Title="SuppliersView" Height="600" Width="800"
+         Background="{StaticResource WindowBackgroundBrush}">
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Action Buttons and Supplier Details -->
+        <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,10,0">
+            <TextBlock Text="Supplier Details" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+
+            <!-- Supplier Name -->
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock Text="Supplier Name:" Margin="0,0,0,5"/>
+                <TextBox Width="200" Height="30" Text="{Binding NewSupplierName, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <!-- Phone -->
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock Text="Phone:" Margin="0,0,0,5"/>
+                <TextBox Width="200" Height="30" Text="{Binding NewSupplierPhone, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <!-- Address -->
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock Text="Address:" Margin="0,0,0,5"/>
+                <TextBox Width="200" Height="30" Text="{Binding NewSupplierAddress, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <!-- Add Supplier Button -->
+            <Button Content="Add Supplier" 
+                    Style="{StaticResource ButtonStyle}" 
+                    Width="120" 
+                    Height="40" 
+                    Margin="5" 
+                    Command="{Binding AddSupplierCommand}"/>
+
+            <!-- Delete Section -->
+            <TextBlock Text="Select Supplier to Delete:" Margin="0,10,0,5"/>
+            <ComboBox Width="200" Height="30" 
+                      ItemsSource="{Binding Suppliers}" 
+                      SelectedItem="{Binding SelectedSupplierForDeletion}" 
+                      DisplayMemberPath="Name"/>
+
+            <!-- Delete Supplier Button -->
+            <Button Content="Delete Supplier" 
+                    Style="{StaticResource ButtonStyle}" 
+                    Width="120" 
+                    Height="40" 
+                    Margin="5" 
+                    Command="{Binding DeleteSupplierCommand}"/>
+
+            <!-- Back Button -->
+            <Button Content="Back" 
+                    Style="{StaticResource ButtonStyle}" 
+                    Width="120" 
+                    Height="40" 
+                    Margin="5" 
+                    Click="BackButton_Click"/>
+        </StackPanel>
+
+        <!-- List of Suppliers -->
+        <ListView Grid.Column="1" Name="SuppliersList" 
+                  Style="{StaticResource ListViewStyle}" 
+                  Margin="0,0,10,10"
+                  ItemsSource="{Binding Suppliers}" 
+                  SelectedItem="{Binding SelectedSupplierForDeletion}" 
+                  Height="300">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Supplier ID" Width="100" DisplayMemberBinding="{Binding SupplierID}"/>
+                    <GridViewColumn Header="Name" Width="200" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="Phone" Width="150" DisplayMemberBinding="{Binding Phone}"/>
+                    <GridViewColumn Header="Address" Width="200" DisplayMemberBinding="{Binding Address}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>

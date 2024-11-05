@@ -70,7 +70,7 @@ namespace Dal.Concrete
             using (var connection = new SqlConnection(_connectionString))
             using (var command = connection.CreateCommand())
             {
-                command.CommandText = "SELECT * FROM Orders WHERE UserID = @UserId AND Status = 'Pending'";
+                command.CommandText = "SELECT * FROM Orders WHERE UserID = @UserId";
                 command.Parameters.AddWithValue("@UserId", userId);
 
                 connection.Open();

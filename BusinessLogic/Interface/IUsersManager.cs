@@ -12,7 +12,7 @@ namespace BusinessLogic.Interface
             Users GetUserById(int userId);
             void UpdateUserPassword(Users user);
             void DeleteUser(int userId);
-
+        int GetCurrentUserId(string username);
 
 
     }

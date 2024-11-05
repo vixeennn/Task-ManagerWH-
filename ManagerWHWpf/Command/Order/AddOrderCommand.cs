@@ -1,37 +1,37 @@
 ﻿using BusinessLogic.Interface;
-using DTO;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ManagerWHWpf.ViewModels;
 using System.Windows.Input;
+using System;
 
-namespace ManagerWHWpf.Command.Order
+public class AddOrderCommand : ICommand
 {
-   
-        public class AddOrderCommand : ICommand
-        {
-            private readonly IOrdersManager _ordersManager;
-            private readonly ObservableCollection<Orders> _ordersCollection;
+    private readonly IOrdersManager _ordersManager;
+    private readonly OrdersViewModel _viewModel;
 
-            public AddOrderCommand(IOrdersManager ordersManager, ObservableCollection<Orders> ordersCollection)
-            {
-                _ordersManager = ordersManager;
-                _ordersCollection = ordersCollection;
-            }
+    public event EventHandler CanExecuteChanged;
 
-            public event EventHandler CanExecuteChanged;
+    public AddOrderCommand(IOrdersManager ordersManager, OrdersViewModel viewModel, Action<string> handleOrderAddFailed)
+    {
+        _ordersManager = ordersManager;
+        _viewModel = viewModel;
+    }
 
-            public bool CanExecute(object parameter) => true;
+    public bool CanExecute(object parameter)
+    {
+        
+        return _viewModel.SelectedProduct != null &&
+               _viewModel.SelectedSupplier != null &&
+               !string.IsNullOrWhiteSpace(_viewModel.NewStatus) &&
+               _viewModel.NewOrderQuantity > 0;
+    }
 
-            public void Execute(object parameter)
-            {
-                var newOrder = parameter as Orders ?? new Orders { OrderDate = DateTime.Now, Status = "New" };
-                _ordersManager.AddOrder(newOrder);
-                _ordersCollection.Add(newOrder);
-            }
-        }
-    
+    public void Execute(object parameter)
+    {
+        _viewModel.AddOrder();
+    }
+
+    public void RaiseCanExecuteChanged()
+    {
+        CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+    }
 }

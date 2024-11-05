@@ -1,5 +1,4 @@
 ﻿using BusinessLogic.Interface;
-using DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,26 +8,21 @@ using System.Windows.Input;
 
 namespace ManagerWHWpf.Command.User
 {
-    public class RegisterCommand : ICommand
+    public class LoginCommand : ICommand
     {
         private readonly IUsersManager _usersManager;
+        private readonly Action _onLoginSuccess;
+        private readonly Action<string> _onLoginFailure;
         private readonly Func<string> _getUsername;
         private readonly Func<string> _getPassword;
-        private readonly Action _onRegisterSuccess;
-        private readonly Action<string> _onRegisterFailure;
 
-        public RegisterCommand(
-            IUsersManager usersManager,
-            Func<string> getUsername,
-            Func<string> getPassword,
-            Action onRegisterSuccess,
-            Action<string> onRegisterFailure)
+        public LoginCommand(IUsersManager usersManager, Func<string> getUsername, Func<string> getPassword, Action onLoginSuccess, Action<string> onLoginFailure)
         {
             _usersManager = usersManager;
             _getUsername = getUsername;
             _getPassword = getPassword;
-            _onRegisterSuccess = onRegisterSuccess;
-            _onRegisterFailure = onRegisterFailure;
+            _onLoginSuccess = onLoginSuccess;
+            _onLoginFailure = onLoginFailure;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -43,21 +37,17 @@ namespace ManagerWHWpf.Command.User
             var username = _getUsername();
             var password = _getPassword();
 
-            if (_usersManager.GetUserByUsername(username) == null)
+            var user = _usersManager.GetUserByUsernameAndPassword(username, password);
+            if (user != null)
             {
-                var newUser = new Users
-                {
-                    Username = username,
-                    Password = password 
-                };
-
-                _usersManager.AddUser(newUser);
-                _onRegisterSuccess?.Invoke();
+                _onLoginSuccess?.Invoke();
             }
             else
             {
-                _onRegisterFailure?.Invoke("Username is already taken.");
+                _onLoginFailure?.Invoke("Incorrect username or password. Try again.");
             }
         }
     }
+
 }
+

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ManagerWHWpf.Command.Supplier
+namespace BLTest
 {
-    internal class ViewSupplierCommand
+    internal class UsersManagerTest
     {
     }
 }

@@ -1,66 +1,54 @@
-﻿using System.Windows;
+﻿using BusinessLogic.Concrete;
+using BusinessLogic.Interface;
+using ManagerWHWpf.ViewModels;
+using System;
+using System.Windows;
 
 namespace ManagerWHWpf.Views
 {
     public partial class RegisterView : Window
     {
-        public RegisterView()
+        private readonly IProductsManager _productsManager;
+        private readonly IOrdersManager _ordersManager;
+        private readonly ISuppliersManager _suppliersManager;
+        public RegisterView(IUsersManager usersManager, IProductsManager productsManager, IOrdersManager ordersManager, ISuppliersManager suppliersManager)
         {
             InitializeComponent();
+
+            var viewModel = new RegisterViewModel(usersManager);
+            viewModel.RegisterSuccessful += ViewModel_RegisterSuccessful;
+            viewModel.RegisterFailed += ViewModel_RegisterFailed;
+            DataContext = viewModel;
+
+            _productsManager = productsManager;
+            _ordersManager = ordersManager;
+            _suppliersManager = suppliersManager;
         }
 
-        private void RegisterButton_Click(object sender, RoutedEventArgs e)
+        private void ViewModel_RegisterSuccessful(object sender, EventArgs e)
         {
-            MessageBox.Show("Register button clicked!");
-            
+            MessageBox.Show("Registration successful!");
+            var loginView = new LoginView(DataContext as IUsersManager, _productsManager, _ordersManager, _suppliersManager);
+            loginView.Show();
+            this.Close();
         }
 
-        private void UsernameTextBox_GotFocus(object sender, RoutedEventArgs e)
+        private void ViewModel_RegisterFailed(string message)
         {
-            UsernamePlaceholder.Visibility = Visibility.Collapsed;
+            MessageBox.Show(message);
         }
 
-        private void UsernameTextBox_LostFocus(object sender, RoutedEventArgs e)
+        private void PasswordTextBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(UsernameTextBox.Text))
-            {
-                UsernamePlaceholder.Visibility = Visibility.Visible;
-            }
+            var viewModel = (RegisterViewModel)DataContext;
+            viewModel.Password = PasswordTextBox.Password;
         }
-
-        private void PasswordTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            PasswordPlaceholder.Visibility = Visibility.Collapsed;
-        }
-
-        private void PasswordTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(PasswordTextBox.Password))
-            {
-                PasswordPlaceholder.Visibility = Visibility.Visible;
-            }
-        }
-
-        private void ConfirmPasswordTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            ConfirmPasswordPlaceholder.Visibility = Visibility.Collapsed;
-        }
-
-        private void ConfirmPasswordTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(ConfirmPasswordTextBox.Password))
-            {
-                ConfirmPasswordPlaceholder.Visibility = Visibility.Visible;
-            }
-        }
-
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-
-            //MainWindow mainWindow = new MainWindow();
-            //mainWindow.Show();
-            //this.Close();
+            var mainWindow = new MainWindow();
+            mainWindow.Show();
+            this.Close();
         }
     }
 }
