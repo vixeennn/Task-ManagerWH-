@@ -40,18 +40,44 @@ namespace BLTests
         }
 
         [Test]
-        public void AddUser_CallsInsertMethodWithCorrectUser()
+        //public void AddUser_CallsInsertMethodWithCorrectUser()
+        //{
+        //    // Arrange
+        //    var user = new Users { UserID = 1, Username = "newuser" };
+        //    _mockUsersDal.Setup(dal => dal.Insert(user)).Returns(user);
+
+        //    // Act
+        //    var result = _usersManager.AddUser(user);
+
+        //    // Assert
+        //    Assert.AreEqual(user, result);
+        //    _mockUsersDal.Verify(dal => dal.Insert(user), Times.Once);
+        //}
+
+
+        public void AddUser_CallsInsertMethodWithCorrectUser_WithGeneratedID()
         {
             // Arrange
-            var user = new Users { UserID = 1, Username = "newuser" };
-            _mockUsersDal.Setup(dal => dal.Insert(user)).Returns(user);
+            var userToAdd = new Users { Username = "newuser" }; 
+            var expectedUser = new Users { UserID = 1, Username = "newuser" };
+
+            
+            _mockUsersDal.Setup(dal => dal.Insert(It.IsAny<Users>()))
+                .Returns((Users user) =>
+                {
+                   
+                    user.UserID = 1; 
+                    return user;
+                });
 
             // Act
-            var result = _usersManager.AddUser(user);
+            var result = _usersManager.AddUser(userToAdd);
 
             // Assert
-            Assert.AreEqual(user, result);
-            _mockUsersDal.Verify(dal => dal.Insert(user), Times.Once);
+            Assert.IsNotNull(result); 
+            Assert.AreEqual(1, result.UserID); 
+            Assert.AreEqual("newuser", result.Username); 
+            _mockUsersDal.Verify(dal => dal.Insert(It.IsAny<Users>()), Times.Once); 
         }
 
         [Test]

@@ -22,7 +22,7 @@ namespace ManagerWHWpf.Views
             _suppliersManager = suppliersManager;
             _currentUserId = currentUserId; 
 
-            var viewModel = new OrdersViewModel(ordersManager, productsManager, suppliersManager, currentUserId); // Pass the user ID to the ViewModel
+            var viewModel = new OrdersViewModel(ordersManager, productsManager, suppliersManager, currentUserId);
             viewModel.OrderDeleted += (sender, e) =>
             {
                 MessageBox.Show("The order has been successfully deleted.");

@@ -7,11 +7,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace ManagerWHWpf.ViewModels
 {
-    public class OrdersViewModel : BaseViewModel, INotifyPropertyChanged
+    public class OrdersViewModel : BaseViewModel
     {
         private readonly IOrdersManager _ordersManager;
         private readonly IProductsManager _productsManager;
@@ -198,6 +199,34 @@ namespace ManagerWHWpf.ViewModels
             NewOrderQuantity = 0;
         }
 
+        //public void EditSelectedOrder()
+        //{
+        //    if (SelectedOrderForEditing != null)
+        //    {
+        //        if (!ValidateEditedOrder(out string validationMessage))
+        //        {
+        //            MessageBox.Show(validationMessage, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //            return;
+        //        }
+
+        //        SelectedOrderForEditing.ProductID = SelectedProduct?.ProductID ?? SelectedOrderForEditing.ProductID;
+        //        SelectedOrderForEditing.SupplierID = SelectedSupplier?.SupplierID ?? SelectedOrderForEditing.SupplierID;
+        //        SelectedOrderForEditing.Status = NewStatus;
+        //        SelectedOrderForEditing.Quantity = NewOrderQuantity;
+
+        //        _ordersManager.UpdateOrder(SelectedOrderForEditing);
+
+        //        var index = Orders.IndexOf(SelectedOrderForEditing);
+        //        if (index >= 0)
+        //        {
+        //            Orders[index] = SelectedOrderForEditing;
+        //            OnPropertyChanged(nameof(Orders));
+        //        }
+
+        //        ClearEditFields();
+        //    }
+        //}
+
         public void EditSelectedOrder()
         {
             if (SelectedOrderForEditing != null)
@@ -208,20 +237,19 @@ namespace ManagerWHWpf.ViewModels
                     return;
                 }
 
+               
                 SelectedOrderForEditing.ProductID = SelectedProduct?.ProductID ?? SelectedOrderForEditing.ProductID;
                 SelectedOrderForEditing.SupplierID = SelectedSupplier?.SupplierID ?? SelectedOrderForEditing.SupplierID;
                 SelectedOrderForEditing.Status = NewStatus;
                 SelectedOrderForEditing.Quantity = NewOrderQuantity;
 
+                
                 _ordersManager.UpdateOrder(SelectedOrderForEditing);
 
-                var index = Orders.IndexOf(SelectedOrderForEditing);
-                if (index >= 0)
-                {
-                    Orders[index] = SelectedOrderForEditing;
-                    OnPropertyChanged(nameof(Orders));
-                }
+               
+                CollectionViewSource.GetDefaultView(Orders)?.Refresh();
 
+                
                 ClearEditFields();
             }
         }

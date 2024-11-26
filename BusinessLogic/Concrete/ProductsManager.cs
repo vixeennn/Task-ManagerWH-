@@ -55,5 +55,10 @@ namespace BusinessLogic.Concrete
         {
             _productsDal.Delete(productId);
         }
+
+        public void UpdateProduct(Products product)
+        {
+            _productsDal.Update(product);
+        }
     }
 }

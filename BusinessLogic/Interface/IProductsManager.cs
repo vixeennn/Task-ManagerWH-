@@ -11,5 +11,6 @@ namespace BusinessLogic.Interface
         List<Products> SortProductsByQuantity();
         List<Products> SortProductsByPrice();
         void DeleteProduct(int productId);
+        void UpdateProduct(Products product);
     }
 }

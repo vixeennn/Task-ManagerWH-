@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Вхід";
+}
+
+<div class="text-center mt-5">
+    <h1 class="display-4">Вхід у систему</h1>
+
+    <!-- Форма для входу з логуванням -->
+    <form method="post" asp-action="Login">
+        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+        <div class="form-group">
+            <label for="username">Ім'я користувача</label>
+            <input type="text" id="username" name="username" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label for="password">Пароль</label>
+            <input type="password" id="password" name="password" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Увійти</button>
+    </form>
+
+    <!-- Кнопка "Увійти без логування" -->
+    <div class="mt-4">
+        <form method="get" asp-action="EnterWithoutLogin">
+            <button type="submit" class="btn btn-secondary mt-3">Увійти без логування</button>
+        </form>
+    </div>
+</div>

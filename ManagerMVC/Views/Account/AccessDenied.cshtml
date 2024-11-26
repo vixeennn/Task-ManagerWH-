@@ -1,0 +1,11 @@
+﻿@{
+    ViewData["Title"] = "Access Denied";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="text-center mt-5">
+    <h1 class="display-4 text-danger">Доступ заборонений</h1>
+    <p class="lead">Ви не маєте дозволу на доступ до цієї сторінки.</p>
+    <a href="javascript:history.back()" class="btn btn-primary mt-3">Повернутися назад</a>
+    <a href="@Url.Action("Login", "Account")" class="btn btn-secondary mt-3">Увійти як інший користувач</a>
+</div>

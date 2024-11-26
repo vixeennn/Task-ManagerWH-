@@ -25,20 +25,20 @@ namespace ManagerWHWpf
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }
 
-        private void ConfigureServices(IServiceCollection services) // Змінено на IServiceCollection
+        private void ConfigureServices(IServiceCollection services) 
         {
-            // Налаштування конфігурації для зчитування з manager.json
+           
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("manager.json", optional: false, reloadOnChange: true)
                 .Build();
 
-            // Реєстрація Microsoft.Extensions.Configuration.IConfiguration для конфігурації
+            
             services.AddSingleton<Microsoft.Extensions.Configuration.IConfiguration>(configuration);
 
-            // Реєстрація DAL для кожної сутності з використанням рядка підключення
+           
             services.AddTransient<IUsersDal>(provider =>
-                new UsersDal(configuration.GetConnectionString("ManagerWH"))); // Параметр конструктора
+                new UsersDal(configuration.GetConnectionString("ManagerWH"))); 
 
             services.AddTransient<IOrdersDal, OrdersDal>();
             services.AddTransient<IProductsDal, ProductsDal>();

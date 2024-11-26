@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>@ViewBag.Message</p>
+
+<p>Щоб виконати цю дію, будь ласка, увійдіть в систему.</p>
+
+<!-- Кнопка для переходу на сторінку входу -->
+<button id="redirectBtn" class="btn btn-primary">Перейти до входу</button>
+
+<!-- Кнопка для повернення на список продуктів -->
+<a href="@Url.Action("Index", "Product")" class="btn btn-secondary mt-3">Повернутись до списку продуктів</a>
+
+<script>
+    // Підключаємо функціональність для кнопки переходу до входу
+    document.getElementById("redirectBtn").onclick = function () {
+        // Переходимо на сторінку входу
+        window.location.href = '@Url.Action("Login", "Account")';
+    };
+</script>

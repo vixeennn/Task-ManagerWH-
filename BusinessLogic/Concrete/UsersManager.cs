@@ -52,7 +52,7 @@ public class UsersManager : IUsersManager
     public int GetCurrentUserId(string username)
     {
         var user = GetUserByUsername(username);
-        return user?.UserID ?? 0; // Return 0 if user is not found
+        return user?.UserID ?? 0; 
     }
 
 }

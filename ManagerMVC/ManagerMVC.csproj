@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- AutoMapper та його інтеграція з Dependency Injection -->
+
+		<!-- Додаткова бібліотека для авторизації -->
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="9.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Посилання на інші проекти -->
+		<ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj" />
+		<ProjectReference Include="..\Dal\Dal.csproj" />
+		<ProjectReference Include="..\DTO\DTO.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -12,5 +12,6 @@ namespace Dal.Interface
         List<Products> SortByQuantity();
         List<Products> SortByPrice();
         void Delete(int productId);
+        void Update(Products product);
     }
 }

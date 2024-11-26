@@ -1,0 +1,16 @@
+﻿@model DTO.Products
+
+@{
+    ViewData["Title"] = "Delete Product";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>Are you sure you want to delete the product: <strong>@Model.Name</strong>?</p>
+
+<!-- Форма видалення -->
+<form id="deleteForm" asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" name="id" value="@Model.ProductID" />
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a href="@Url.Action("Index", "Product")" class="btn btn-secondary">Cancel</a>
+</form>

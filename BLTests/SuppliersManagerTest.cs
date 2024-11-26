@@ -36,19 +36,44 @@ namespace BLTests
         }
 
         [Test]
-        public void AddSupplier_ShouldReturnAddedSupplier()
+        //public void AddSupplier_ShouldReturnAddedSupplier()
+        //{
+        //    // Arrange
+        //    var supplier = new Suppliers { SupplierID = 1, Name = "New Supplier" };
+        //    _mockSuppliersDal.Setup(dal => dal.Insert(It.IsAny<Suppliers>())).Returns(supplier);
+
+        //    // Act
+        //    var result = _suppliersManager.AddSupplier(supplier);
+
+        //    // Assert
+        //    Assert.IsNotNull(result);
+        //    Assert.AreEqual(1, result.SupplierID);
+        //    Assert.AreEqual("New Supplier", result.Name);
+        //}
+
+
+        public void AddSupplier_ShouldReturnAddedSupplier_WithGeneratedID()
         {
             // Arrange
-            var supplier = new Suppliers { SupplierID = 1, Name = "New Supplier" };
-            _mockSuppliersDal.Setup(dal => dal.Insert(It.IsAny<Suppliers>())).Returns(supplier);
+            var supplierToAdd = new Suppliers { Name = "New Supplier" }; // Не вказуємо SupplierID
+            var expectedSupplier = new Suppliers { SupplierID = 1, Name = "New Supplier" }; // Це значення ми очікуємо після додавання
+
+            // Налаштовуємо мок-об'єкт так, щоб Insert повертав вже присвоєний ID постачальнику
+            _mockSuppliersDal.Setup(dal => dal.Insert(It.IsAny<Suppliers>()))
+                .Returns((Suppliers supplier) =>
+                {
+                    // Присвоюємо ID новому постачальнику під час додавання
+                    supplier.SupplierID = 1;
+                    return supplier;
+                });
 
             // Act
-            var result = _suppliersManager.AddSupplier(supplier);
+            var result = _suppliersManager.AddSupplier(supplierToAdd);
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.SupplierID);
-            Assert.AreEqual("New Supplier", result.Name);
+            Assert.IsNotNull(result); // Перевіряємо, що результат не null
+            Assert.AreEqual(1, result.SupplierID); // Перевіряємо, чи ID був правильно присвоєний
+            Assert.AreEqual("New Supplier", result.Name); // Перевіряємо, чи правильне ім'я
         }
 
         [Test]

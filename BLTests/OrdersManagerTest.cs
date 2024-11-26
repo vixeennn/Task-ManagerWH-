@@ -36,18 +36,42 @@ namespace BLTests
         }
 
         [Test]
-        public void AddOrder_ShouldAddOrderAndReturnOrder()
+        //public void AddOrder_ShouldAddOrderAndReturnOrder()
+        //{
+        //    // Arrange
+        //    var order = new Orders { OrderID = 2, Status = "Pending" };
+        //    _mockOrdersDal.Setup(dal => dal.Insert(It.IsAny<Orders>())).Returns(order);
+
+        //    // Act
+        //    var result = _ordersManager.AddOrder(order);
+
+        //    // Assert
+        //    Assert.IsNotNull(result);
+        //    Assert.AreEqual(2, result.OrderID);
+        //}
+
+        public void AddOrder_ShouldAddOrderAndReturnOrder_WithGeneratedID()
         {
             // Arrange
-            var order = new Orders { OrderID = 2, Status = "Pending" };
-            _mockOrdersDal.Setup(dal => dal.Insert(It.IsAny<Orders>())).Returns(order);
+            var orderToAdd = new Orders { Status = "Pending" }; 
+            var expectedOrder = new Orders { OrderID = 2, Status = "Pending" }; 
+
+           
+            _mockOrdersDal.Setup(dal => dal.Insert(It.IsAny<Orders>()))
+                .Returns((Orders order) =>
+                {
+                   
+                    order.OrderID = 2; 
+                    return order;
+                });
 
             // Act
-            var result = _ordersManager.AddOrder(order);
+            var result = _ordersManager.AddOrder(orderToAdd);
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(2, result.OrderID);
+            Assert.IsNotNull(result); 
+            Assert.AreEqual(2, result.OrderID); 
+            Assert.AreEqual("Pending", result.Status); 
         }
 
         [Test]

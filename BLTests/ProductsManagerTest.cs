@@ -21,18 +21,41 @@ namespace BLTests
         }
 
         [Test]
-        public void AddProduct_ShouldReturnAddedProduct()
+        //public void AddProduct_ShouldReturnAddedProduct()
+        //{
+        //    // Arrange
+        //    var product = new Products { ProductID = 1, Name = "Test Product" };
+        //    _mockProductsDal.Setup(dal => dal.Insert(It.IsAny<Products>())).Returns(product);
+
+        //    // Act
+        //    var result = _productsManager.AddProduct(product);
+
+        //    // Assert
+        //    Assert.IsNotNull(result);
+        //    Assert.AreEqual(1, result.ProductID);
+        //    Assert.AreEqual("Test Product", result.Name);
+        //}
+        public void AddProduct_ShouldReturnAddedProduct_WithGeneratedID()
         {
             // Arrange
-            var product = new Products { ProductID = 1, Name = "Test Product" };
-            _mockProductsDal.Setup(dal => dal.Insert(It.IsAny<Products>())).Returns(product);
+            var productToAdd = new Products { Name = "Test Product" }; 
+            var expectedProduct = new Products { ProductID = 1, Name = "Test Product" }; 
+
+            
+            _mockProductsDal.Setup(dal => dal.Insert(It.IsAny<Products>()))
+                .Returns((Products product) =>
+                {
+                    
+                    product.ProductID = 1;
+                    return product;
+                });
 
             // Act
-            var result = _productsManager.AddProduct(product);
+            var result = _productsManager.AddProduct(productToAdd);
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.ProductID);
+            Assert.IsNotNull(result); 
+            Assert.AreEqual(1, result.ProductID); 
             Assert.AreEqual("Test Product", result.Name);
         }
 

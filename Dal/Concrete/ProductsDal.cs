@@ -129,5 +129,22 @@ namespace Dal.Concrete
                 _connection.Close();
             }
         }
+
+        public void Update(Products product)
+        {
+            using (SqlCommand command = _connection.CreateCommand())
+            {
+                command.CommandText = "UPDATE Products SET Name = @Name, QuantityInStock = @QuantityInStock, Price = @Price WHERE ProductID = @ProductID";
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@ProductID", product.ProductID);
+                command.Parameters.AddWithValue("@Name", product.Name);
+                command.Parameters.AddWithValue("@QuantityInStock", product.QuantityInStock);
+                command.Parameters.AddWithValue("@Price", product.Price);
+
+                _connection.Open();
+                command.ExecuteNonQuery();
+                _connection.Close();
+            }
+        }
     }
 }
